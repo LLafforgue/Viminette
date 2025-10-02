@@ -1,0 +1,57 @@
+" Activation de la syntaxe et de l'indentation
+syntax on
+set autoindent
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set softtabstop=4
+
+" Numéros de ligne et limite à 80 colonnes
+set number
+set colorcolumn=80
+
+" Recherche incrémentale et mise en évidence
+set incsearch
+set hlsearch
+
+" Encodage UTF-8
+set encoding=utf-8
+
+" Activation de la souris
+set mouse=a
+
+" Barre de statut informative
+set laststatus=2
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]
+
+" Copier-coller système
+set clipboard=unnamedplus
+
+" Thème de couleurs (à installer si nécessaire)
+colorscheme desert
+
+" Règles pour la Norminette
+" -------------------------
+" Limite de 80 colonnes
+set textwidth=80
+set wrap
+
+" Indentation automatique en 4 espaces
+autocmd FileType c setlocal shiftwidth=4 tabstop=4 expandtab
+
+" Générer automatiquement deux parenthèses () quand on tape une seule
+inoremap ( ()<left>
+
+" Mise en évidence des espaces en trop et des tabulations
+set list
+set listchars=tab:»·,trail:·
+
+" Désactiver la création de fichiers de swap
+set noswapfile
+
+" Sauvegarder automatiquement avant de quitter
+autocmd InsertLeave * silent update
+
+" Afficher les erreurs de compilation rapidement
+autocmd FileType c map <F9> :w<CR>:!clear; gcc -Wall -Wextra -Werror % -o %< && ./%< <CR>
