@@ -1,10 +1,13 @@
 #include <unistd.h>
 
-// int ft_error(int n)
-// {
-// 	if(n <= 0 | n > 9)
-// 		return (1);
-// }
+int ft_error(int n)
+{
+	if(n <= 0 | n > 9)
+	{
+		write(1, "oups !", 6);
+		return (1);
+	};
+}
 
 void	ft_print_once(int i, char *buff)
 {
@@ -43,7 +46,7 @@ void	ft_inc_rec(int i, int n, char *buff)
 void	ft_print_combn(int n)
 {
 	char	buff[8];
-	if(n <= 0 | n > 9)
+	if(ft_error(n) == 1)
 		return ;
 	buff[n - 1] = '0';
 	ft_init(n - 1, buff);
@@ -58,6 +61,6 @@ void	ft_print_combn(int n)
 
 int main(void)
 {
-	ft_print_combn(4);
+	ft_print_combn(0);
 	return (0);
 }
