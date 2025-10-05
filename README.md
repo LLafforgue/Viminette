@@ -78,7 +78,7 @@ Ce `.vimrc` est optimisé pour respecter les règles de la **Norminette** de l�
 |----------------------|--------|
 | `F9`                 | Compile et exécute le fichier courant. |
 | `:AddMain`           | Insère un squelette de `main()` conforme à la Norminette. |
-| `Ctrl+Space`         | Autocomplète une fonction `ft_` (mode insertion). |
+| `Ctrl+X` ; `Ctrl+U`  | Autocomplète une fonction `ft_` (mode insertion). |
 | `Ctrl+C`             | Copie la sélection dans le presse-papier système. |
 | `Ctrl+V`             | Colle le contenu du presse-papier. |
 | `:w`                 | Sauvegarde le fichier courant. |

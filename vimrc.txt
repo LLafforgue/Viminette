@@ -65,20 +65,20 @@ autocmd FileType c nnoremap <F9> :w<CR>:!clear; gcc -Wall -Wextra -Werror % -o %
 command! AddMain call append(0, [
 \ '#include <unistd.h>',
 \ '',
-\ 'int\tmain(void)',
+\ 'int  main(void)',
 \ '{',
-\ '\twrite(1, "42!\\n", 1);',
-\ '\treturn (0);',
+\ ' write(1, "42!\\n", 4);',
+\ ' return (0);',
 \ '}'
 \ ])
 
 " --- Autocomplétion pour les fonctions ft_ ---
 " Scanne le fichier courant pour toutes les fonctions ft_
-set completefunc=FTFunctionComplete
+set completefunc=FTDynamicComplete
 
-function! FTFunctionComplete(findstart, base)
+function! FTDynamicComplete(findstart, base)
     if a:findstart
-        " Cherche le début du mot
+        " Trouver le début du mot sous le curseur
         let line = getline('.')
         let start = col('.') - 1
         while start > 0 && line[start - 1] =~ '\k'
@@ -86,17 +86,27 @@ function! FTFunctionComplete(findstart, base)
         endwhile
         return start
     else
-        " Liste des correspondances
+        " Déterminer le préfixe dynamiquement
+        " Ici on prend le mot courant (a:base) et on vérifie s'il commence par ft_
+        let prefix = a:base
+
+        " Créer une liste pour stocker les matches
         let l:matches = []
+
+        " Parcourir toutes les lignes du buffer
         for l in getbufline('%', 1, '$')
-            if l =~? '^.*\s\+ft_\w\+\s*('
-                let l:name = matchstr(l, 'ft_\w\+')
-                if index(l:matches, l:name) < 0
-                    call add(l:matches, l:name)
+
+            " Chercher toutes les occurrences de ft_xxx (noms valides)
+            for m in matchlist(l, '\v(ft_[A-Za-z0-9_]+)')
+                if !empty(m[1]) && m[1] =~ '^' . prefix
+                    if index(l:matches, m[1]) < 0
+                        call add(l:matches, m[1])
+                    endif
                 endif
-            endif
+            endfor
         endfor
-        return filter(l:matches, 'v:val =~ "^" . a:base')
+
+        return sort(l:matches)
     endif
 endfunction
 
