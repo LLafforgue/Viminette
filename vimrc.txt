@@ -1,57 +1,104 @@
-" Activation de la syntaxe et de l'indentation
+" ================================
+"      CONFIGURATION NORMINETTE
+" ================================
+
+" Syntaxe et indentation
 syntax on
 set autoindent
 set smartindent
-set tabstop=4
-set shiftwidth=4
-set expandtab
-set softtabstop=4
 
-" Numéros de ligne et limite à 80 colonnes
-set number
+" Indentation conforme Norminette : tabulations réelles
+set noexpandtab       " Ne PAS convertir Tab en espaces
+set tabstop=4         " Largeur d’une tabulation = 4
+set shiftwidth=4      " Décalage pour indentations automatiques
+set softtabstop=0     " Tab insère un vrai \t
+
+" Limite de 80 colonnes
+set textwidth=80
 set colorcolumn=80
+set wrap
 
-" Recherche incrémentale et mise en évidence
+" Numéros de ligne
+set number
+
+" Recherche
 set incsearch
 set hlsearch
 
-" Encodage UTF-8
+" UTF-8
 set encoding=utf-8
 
-" Activation de la souris
+" Souris activée
 set mouse=a
 
-" Barre de statut informative
+" Barre de statut
 set laststatus=2
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]
 
-" Copier-coller système
+" Copier/coller système
 set clipboard=unnamedplus
+vnoremap <C-c> "+y
+nnoremap <C-v> "+p
+inoremap <C-v> <C-r>+
 
-" Thème de couleurs (à installer si nécessaire)
+" Thème
 colorscheme desert
 
-" Règles pour la Norminette
-" -------------------------
-" Limite de 80 colonnes
-set textwidth=80
-set wrap
-
-" Indentation automatique en 4 espaces
-autocmd FileType c setlocal shiftwidth=4 tabstop=4 expandtab
-
-" Générer automatiquement deux parenthèses () quand on tape une seule
-inoremap ( ()<left>
-
-" Mise en évidence des espaces en trop et des tabulations
+" Mise en évidence des tabulations et espaces fin de ligne
 set list
 set listchars=tab:»·,trail:·
 
-" Désactiver la création de fichiers de swap
+" Pas de swap
 set noswapfile
 
-" Sauvegarder automatiquement avant de quitter
+" Sauvegarde automatique en quittant le mode insertion
 autocmd InsertLeave * silent update
 
-" Afficher les erreurs de compilation rapidement
-autocmd FileType c map <F9> :w<CR>:!clear; gcc -Wall -Wextra -Werror % -o %< && ./%< <CR>
+" Compilation rapide (F9)
+autocmd FileType c nnoremap <F9> :w<CR>:!clear; gcc -Wall -Wextra -Werror % -o %< && ./%< <CR>
+
+" ================================
+"     COMMANDES PERSONNALISÉES
+" ================================
+
+" --- Insérer un main conforme Norminette ---
+command! AddMain call append(0, [
+\ '#include <unistd.h>',
+\ '',
+\ 'int\tmain(void)',
+\ '{',
+\ '\twrite(1, "42!\\n", 1);',
+\ '\treturn (0);',
+\ '}'
+\ ])
+
+" --- Autocomplétion pour les fonctions ft_ ---
+" Scanne le fichier courant pour toutes les fonctions ft_
+set completefunc=FTFunctionComplete
+
+function! FTFunctionComplete(findstart, base)
+    if a:findstart
+        " Cherche le début du mot
+        let line = getline('.')
+        let start = col('.') - 1
+        while start > 0 && line[start - 1] =~ '\k'
+            let start -= 1
+        endwhile
+        return start
+    else
+        " Liste des correspondances
+        let l:matches = []
+        for l in getbufline('%', 1, '$')
+            if l =~? '^.*\s\+ft_\w\+\s*('
+                let l:name = matchstr(l, 'ft_\w\+')
+                if index(l:matches, l:name) < 0
+                    call add(l:matches, l:name)
+                endif
+            endif
+        endfor
+        return filter(l:matches, 'v:val =~ "^" . a:base')
+    endif
+endfunction
+
+" Raccourci pour déclencher l’autocomplétion manuellement
+inoremap <C-Space> <C-x><C-u>
