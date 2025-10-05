@@ -1,49 +1,63 @@
 #include <unistd.h>
 
-void	ft_atest()
+// int ft_error(int n)
+// {
+// 	if(n <= 0 | n > 9)
+// 		return (1);
+// }
 
-void	ft_test(void)
+void	ft_print_once(int i, char *buff)
 {
-	wrtite(1, "ceci est un test", 16);
+	while ('0' <= buff[i] && '9'>= buff[i])
+	{
+		write(1, &buff[i--], 1);
+	}
 }
-int	main(void)
+
+void	ft_init(int n, char *buff)
 {
-	ft_test()
+	if (n <= 0)
+		return ;
+	buff[n - 1] = buff[n] + 1 ;
+	ft_init(n - 1, buff);
+}
 
-		n! FTDynamicComplete(findstart, base)
-		    if a:findstart
-				        " Trouver le début du mot sous le curseur
-							        let line = getline('.')
-									        let start = col('.') - 1
-											        while start > 0 && line[start - 1] =~ '\k'
-														            let start -= 1
-																		        endwhile
-																				        return start
-																						    else
-																								        " Déterminer le préfixe dynamiquement
-																											        " Ici on prend le mot courant (a:base) et on vérifie s'il commence par ft_
-																													        let prefix = a:base
+void	ft_inc_rec(int i, int n, char *buff)
+{
+	if (i == n)
+		return ;
+	if (buff[i] == '9' - i)
+		ft_inc_rec(i + 1, n, buff);
+	else
+	{
+		while (i >= 0)
+		{
+			buff[i--] += 1;
+			if(i >= 0)
+				buff[i] = buff[i + 1];
+		}
+	}
+	
+}
 
-																															        " Créer une liste pour stocker les matches
-																																	        let l:matches = []
+void	ft_print_combn(int n)
+{
+	char	buff[8];
+	if(n <= 0 | n > 9)
+		return ;
+	buff[n - 1] = '0';
+	ft_init(n - 1, buff);
+	ft_print_once(n - 1, buff);
+	while (buff[n - 1] != '9' - n + 1)
+	{
+		write(1, ", ", 2);
+		ft_inc_rec(0, n, buff);
+		ft_print_once(n - 1, buff);
+	}
+}
 
-																																			        " Parcourir toutes les lignes du buffer
-																																					        for l in getbufline('%', 1, '$')
-
-																																								            " Chercher toutes les occurrences de ft_xxx (noms valides)
-																																												            for m in matchlist(l, '\v(ft_[A-Za-z0-9_]+)')
-																																																                if !empty(m[1]) && m[1] =~ '^' . prefix
-																																																					                    if index(l:matches, m[1]) < 0
-																																																											                        call add(l:matches, m[1])
-																																																																		                    endif
-																																																																							                endif
-																																																																											            endfor
-																																																																														        endfor
-
-																																																																																        return sort(l:matches)
-																																																																																		    endif
-																																																																																			endfunction
-	write(1, "42!\\n", 4);
+int main(void)
+{
+	ft_print_combn(4);
 	return (0);
 }
-
