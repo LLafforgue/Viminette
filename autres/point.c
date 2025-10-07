@@ -10,20 +10,20 @@ void ft_print(int *buff, int size)
 
 void ft_sort_tab(int *buff, int size)
 {
-    int max ;
+    int min ;
     int i;
     
     if (size <= 1)
         return ;
     i = 1;
-    max = *buff;
+    min = *buff;
     while (i < size)
     {
-        if (max < *(buff + i))
+        if (min > *(buff + i))
         {
-            max = *(buff + i);
+            min = *(buff + i);
             *(buff + i) = *buff;
-            *buff = max;
+            *buff = min;
         }
         i ++;
     }
@@ -32,7 +32,7 @@ void ft_sort_tab(int *buff, int size)
 
 int main(void)
 {
-    int tab[5] = {5, 12, 11, 1, 18};
-    ft_sort_tab(tab, 5);
-    ft_print(tab, 5);
+    int tab[6] = {4, 2, 4, 2, 8, 4};
+    ft_sort_tab(tab, 6);
+    ft_print(tab, 6);
 }
