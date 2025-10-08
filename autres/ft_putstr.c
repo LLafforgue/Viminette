@@ -7,9 +7,17 @@ void    ft_putstr(char *str)
         return ft_putstr(str + 1);
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
     char string[15] = "Il faut un mot";
-    ft_putstr(string);
-    return (0);
+    if (argc != 2)
+    {
+        ft_putstr(string);
+        return (1);
+    }
+    else
+    {
+        ft_putstr(*(argv + 1));
+        return (0);
+    }
 }

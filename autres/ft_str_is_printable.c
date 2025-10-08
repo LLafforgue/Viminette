@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-int ft_str_is_uppercase(char *str)
+int ft_str_is_printable(char *str)
 {
     if(*str == 0)
         return (1);
@@ -9,7 +9,7 @@ int ft_str_is_uppercase(char *str)
         if (*str >= 32 && *str <= 126)
         {
             if (*(str + 1))
-                return ft_str_is_uppercase(str + 1);
+                return ft_str_is_printable(str + 1);
             else
                 return (1);
         }
@@ -20,8 +20,8 @@ int ft_str_is_uppercase(char *str)
 
 int main(void)
 {
-    printf("La string contient est %d\n", ft_str_is_uppercase("125bla"));
-    printf("La string contient est %d\n", ft_str_is_uppercase("BOU"));
-    printf("La string contient est %d\n", ft_str_is_uppercase("BouBa"));
+    printf("La string contient est %d\n", ft_str_is_printable("125bla"));
+    printf("La string contient est %d\n", ft_str_is_printable("BOU"));
+    printf("La string contient est %d\n", ft_str_is_printable("BouBa"));
     return (0);
 }
