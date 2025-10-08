@@ -3,10 +3,11 @@
 
 void ft_hex(char str)
 {
-    int dec = str;
-    int i;
-    char hex[2];
+    int     dec;
+    int     i;
+    char    hex[2];
 
+    dec = str;
     i = 0;
     write(1, "\\", 1);
     while (i < 2)
@@ -51,7 +52,7 @@ void    ft_putstr_non_printable(char *str)
 
 int main(void)
 {
-    char string[17] = "Il faut un mot\nH";
+    char string[17] = "Il faut un mot\n";
     ft_putstr_non_printable(string);
     return (0);
 }
